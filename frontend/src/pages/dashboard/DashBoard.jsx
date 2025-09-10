@@ -1,48 +1,78 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; 
-import "@assets/css/dashboard.css"; // ✅ Using alias instead of absolute path
+import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import '@assets/css/dashboard.css'; // ✅ Using alias instead of absolute path
 
-function DashboardApp() {
-  const [activePage, setActivePage] = useState("dashboard");
-  const navigate = useNavigate();
+function DashboardApp () {
+  const [activePage, setActivePage] = useState ('dashboard');
+  const navigate = useNavigate ();
 
   // ✅ Offers state
-  const [offers, setOffers] = useState([
-    { title: "50% off on Shoes", description: "Get half price on all shoes" },
-    { title: "Buy 1 Get 1 Free", description: "Available on T-Shirts only" },
+  const [offers, setOffers] = useState ([
+    {title: '50% off on Shoes', description: 'Get half price on all shoes'},
+    {title: 'Buy 1 Get 1 Free', description: 'Available on T-Shirts only'},
   ]);
 
   // ✅ Logout handler
   const handleLogout = () => {
-    alert("You have been logged out!");
-    navigate("/login"); // ✅ redirect to login page
+    alert ('You have been logged out!');
+    navigate ('/login'); // ✅ redirect to login page
   };
 
   // ✅ Add Offer
-  const handleAddOffer = (e) => {
-    e.preventDefault();
+  const handleAddOffer = e => {
+    e.preventDefault ();
     const title = e.target.title.value;
     const description = e.target.description.value;
+    const formData = new FormData (e.target);
 
-    if (title.trim() && description.trim()) {
-      setOffers([...offers, { title, description }]);
-      e.target.reset();
+    if (title.trim () && description.trim ()) {
+      setOffers ([...offers, {title, description}]);
+      e.target.reset ();
     }
+
+    const newOffer = {
+      title: formData.get ('title'),
+      description: formData.get ('description'),
+      price: parseFloat (formData.get ('price')), // This is in ₹
+      expiresAt: new Date (formData.get ('expiresAt')),
+    };
+    console.log ('New Offer:', newOffer);
   };
 
   // ✅ Send Offers via SMS or WhatsApp
-  const handleSendOffers = (method) => {
-    const message = offers.map((o) => `${o.title}: ${o.description}`).join("\n");
+  const handleSendOffers = method => {
+    const message = offers
+      .map (o => `${o.title}: ${o.description}`)
+      .join ('\n');
 
-    if (method === "sms") {
-      alert("📩 Sending SMS to all customers:\n\n" + message);
+    if (method === 'sms') {
+      alert ('📩 Sending SMS to all customers:\n\n' + message);
     }
 
-    if (method === "whatsapp") {
-      const encodedMessage = encodeURIComponent(message);
+    if (method === 'whatsapp') {
+      const encodedMessage = encodeURIComponent (message);
       const waLink = `https://wa.me/?text=${encodedMessage}`;
-      window.open(waLink, "_blank");
+      window.open (waLink, '_blank');
     }
+  };
+
+  // Product Management
+  const handleAddProduct = e => {
+    e.preventDefault ();
+    const formData = new FormData (e.target);
+
+    const product = {
+      name: formData.get ('name'),
+      description: formData.get ('description'),
+      price: parseFloat (formData.get ('price')),
+      image: formData.get ('image'), // File object
+    };
+
+    // Optional: preview or upload
+    const imageUrl = URL.createObjectURL (product.image);
+    console.log ('Preview URL:', imageUrl);
+
+    // Send `product` to backend or save in state
   };
 
   return (
@@ -51,13 +81,39 @@ function DashboardApp() {
       <div className="sidebar">
         <h2>Store Admin</h2>
         <ul>
-          <li><a href="#!" onClick={() => setActivePage("dashboard")}>🏠 Dashboard</a></li>
-          <li><a href="#!" onClick={() => setActivePage("offers")}>🎁 Offers</a></li>
-          <li><a href="#!" onClick={() => setActivePage("customers")}>👥 Customers</a></li>
-          <li><a href="#!" onClick={() => setActivePage("products")}>🛒 Products</a></li>
-          <li><a href="#!" onClick={() => setActivePage("invoices")}>🧾 Invoices</a></li>
-          <li><a href="#!" onClick={() => setActivePage("notifications")}>📢 Notifications</a></li>
-          <li><a href="#!" onClick={() => setActivePage("reports")}>📊 Reports</a></li>
+          <li>
+            <a href="#!" onClick={() => setActivePage ('dashboard')}>
+              🏠 Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="#!" onClick={() => setActivePage ('offers')}>🎁 Offers</a>
+          </li>
+          <li>
+            <a href="#!" onClick={() => setActivePage ('customers')}>
+              👥 Customers
+            </a>
+          </li>
+          <li>
+            <a href="#!" onClick={() => setActivePage ('products')}>
+              🛒 Products
+            </a>
+          </li>
+          <li>
+            <a href="#!" onClick={() => setActivePage ('invoices')}>
+              🧾 Invoices
+            </a>
+          </li>
+          <li>
+            <a href="#!" onClick={() => setActivePage ('notifications')}>
+              📢 Notifications
+            </a>
+          </li>
+          <li>
+            <a href="#!" onClick={() => setActivePage ('reports')}>
+              📊 Reports
+            </a>
+          </li>
           <li><a href="#!" onClick={handleLogout}>🚪 Logout</a></li>
         </ul>
       </div>
@@ -65,7 +121,7 @@ function DashboardApp() {
       {/* Main Content */}
       <div className="main-content">
         {/* Dashboard */}
-        {activePage === "dashboard" && (
+        {activePage === 'dashboard' &&
           <div>
             <h1>Welcome to Dashboard 🎉</h1>
             <div className="grid-3">
@@ -75,74 +131,143 @@ function DashboardApp() {
             </div>
             <h2>Latest Offers</h2>
             <ul>
-              {offers.map((offer, idx) => (
+              {offers.map ((offer, idx) => (
                 <li key={idx}>
                   ✅ <strong>{offer.title}</strong> - {offer.description}
                 </li>
               ))}
             </ul>
-          </div>
-        )}
+          </div>}
 
         {/* Offers */}
-        {activePage === "offers" && (
+        {activePage === 'offers' &&
           <div>
             <h1>Offer Management 🎁</h1>
             <form onSubmit={handleAddOffer}>
-              <input type="text" name="title" placeholder="Offer Title" required />
-              <textarea name="description" placeholder="Offer Description" required></textarea>
+              <input
+                type="text"
+                name="title"
+                placeholder="Offer Title"
+                required
+              />
+
+              <textarea
+                name="description"
+                placeholder="Offer Description"
+                required
+              />
+
+              <input
+                type="number"
+                name="price"
+                placeholder="Offer Price (₹)"
+                min="0"
+                step="0.01"
+                required
+              />
+
+              <input type="datetime-local" name="expiresAt" required />
+
               <button className="green">Create Offer</button>
             </form>
 
             <ul>
-              {offers.map((offer, idx) => (
+              {offers.map ((offer, idx) => (
                 <li key={idx} className="active-offer">
                   <strong>{offer.title}</strong> - {offer.description}
                 </li>
               ))}
             </ul>
-          </div>
-        )}
+          </div>}
 
         {/* Customers */}
-        {activePage === "customers" && (
+        {activePage === 'customers' &&
           <div>
             <h1>Customer Management 👥</h1>
-            <form onSubmit={(e) => e.preventDefault()}>
-              <input type="text" placeholder="Customer Name" required />
-              <input type="email" placeholder="Customer Email" required />
+            <form onSubmit={e => e.preventDefault ()}>
+              <input
+                type="text"
+                name="name"
+                placeholder="Customer Name"
+                required
+              />
+
+              <input
+                type="email"
+                name="email"
+                placeholder="Customer Email"
+                required
+              />
+
+              <input
+                type="tel"
+                name="phone"
+                placeholder="Customer Phone"
+                pattern="[0-9]{10}"
+                title="Enter a 10-digit phone number"
+                required
+              />
+
+              <input
+                type="text"
+                name="address"
+                placeholder="Customer Address"
+              />
+
               <button className="blue">Add Customer</button>
             </form>
+
             <ul>
               <li>John Doe - john@example.com</li>
               <li>Jane Smith - jane@example.com</li>
             </ul>
-          </div>
-        )}
+          </div>}
 
         {/* Products */}
-        {activePage === "products" && (
+        {activePage === 'products' &&
           <div>
             <h1>Product Management 🛒</h1>
-            <form onSubmit={(e) => e.preventDefault()}>
-              <input type="text" placeholder="Product Name" required />
-              <input type="text" placeholder="Price" required />
-              <button className="purple">Add Product</button>
+            <form onSubmit={handleAddProduct}>
+              <input
+                type="text"
+                name="name"
+                placeholder="Product Name"
+                required
+              />
+
+              <textarea
+                name="description"
+                placeholder="Product Description"
+                required
+              />
+
+              <input
+                type="number"
+                name="price"
+                placeholder="Price (₹)"
+                min="0"
+                step="0.01"
+                required
+              />
+
+              <input type="file" name="image" accept="image/*" required />
+
+              <button className="green">Upload Product</button>
             </form>
+
             <ul>
               <li>Nike Shoes - ₹2000</li>
               <li>Adidas Jacket - ₹3500</li>
             </ul>
-          </div>
-        )}
+          </div>}
 
         {/* Invoices */}
-        {activePage === "invoices" && (
+        {activePage === 'invoices' &&
           <div>
             <h1>Invoice Generator 🧾</h1>
-            <form onSubmit={(e) => e.preventDefault()}>
+            <form onSubmit={e => e.preventDefault ()}>
               <input type="text" placeholder="Customer Name" required />
-              <input type="text" placeholder="Product" required />
+              <input type="text" placeholder="Product Name" required />
               <input type="text" placeholder="Amount" required />
               <button className="orange">Generate Invoice</button>
             </form>
@@ -150,28 +275,29 @@ function DashboardApp() {
               <li>Invoice #101 - John Doe - ₹2000</li>
               <li>Invoice #102 - Jane Smith - ₹3500</li>
             </ul>
-          </div>
-        )}
+          </div>}
 
         {/* Notifications */}
-        {activePage === "notifications" && (
+        {activePage === 'notifications' &&
           <div>
             <h1>Push Notifications 📢</h1>
-            <textarea placeholder="Write notification message"></textarea>
+            <textarea placeholder="Write notification message" />
             <div className="send-offers">
               <h3>Send All Active Offers</h3>
-              <button className="blue" onClick={() => handleSendOffers("sms")}>
+              <button className="blue" onClick={() => handleSendOffers ('sms')}>
                 Send via SMS
               </button>
-              <button className="green" onClick={() => handleSendOffers("whatsapp")}>
+              <button
+                className="green"
+                onClick={() => handleSendOffers ('whatsapp')}
+              >
                 Send via WhatsApp
               </button>
             </div>
-          </div>
-        )}
+          </div>}
 
         {/* Reports */}
-        {activePage === "reports" && (
+        {activePage === 'reports' &&
           <div>
             <h1>Reports & Analytics 📊</h1>
             <div className="grid-3">
@@ -179,8 +305,7 @@ function DashboardApp() {
               <div className="card">Weekly Sales: ₹20,000</div>
               <div className="card">Monthly Sales: ₹80,000</div>
             </div>
-          </div>
-        )}
+          </div>}
       </div>
     </div>
   );
