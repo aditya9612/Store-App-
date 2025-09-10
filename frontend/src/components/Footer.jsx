@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import logo from "../assets/images/logo.png";
+import logo from "@assets/images/logo.png";
+
 
 export default function Footer() {
   return (
@@ -42,7 +43,7 @@ export default function Footer() {
                         <li><Link to="/">Home</Link></li>
                         <li><Link to="/about">About</Link></li>
                         <li><Link to="/product">Services</Link></li>
-                        <li><Link to="/testimonial">Testimonial</Link></li>
+                        <li><Link to="/login">Login</Link></li>
                         <li><Link to="/blog">Blog</Link></li>
                         <li><Link to="/contact">Contact</Link></li>
                       </ul>
@@ -55,36 +56,11 @@ export default function Footer() {
                       <ul>
                         <li><a href="#">Account</a></li>
                         <li><a href="#">Checkout</a></li>
-                        <li><a href="#">Login</a></li>
                         <li><a href="#">Register</a></li>
                         <li><a href="#">Shopping</a></li>
                         <li><a href="#">Widget</a></li>
                       </ul>
                     </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Newsletter */}
-              <div className="col-md-5">
-                <div className="widget_menu">
-                  <h3>Newsletter</h3>
-                  <div className="information_f">
-                    <p>Subscribe to our newsletter and get updates daily.</p>
-                  </div>
-                  <div className="form_sub">
-                    <form>
-                      <fieldset>
-                        <div className="field">
-                          <input
-                            type="email"
-                            placeholder="Enter Your Mail"
-                            name="email"
-                          />
-                          <input type="submit" value="Subscribe" />
-                        </div>
-                      </fieldset>
-                    </form>
                   </div>
                 </div>
               </div>

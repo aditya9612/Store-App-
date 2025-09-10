@@ -1,6 +1,6 @@
 /* ======= Header Section ======= */
 .header_section {
-  padding: 15px 0;
+  padding: 5px 0;
   background-color: #fff;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
@@ -22,7 +22,7 @@
 /* ======= Logo ======= */
 .navbar-brand img {
   max-width: 100%;
-  height: auto;
+  height: 90px;
 }
 
 /* ======= Hamburger Button ======= */
@@ -91,8 +91,8 @@
   color: #131313;
   text-transform: uppercase;
   font-weight: 700;
-  padding: 8px 16px;
-  border-radius: 5px;
+  padding: 4px 12px;
+  border-radius: 2px;
   transition: color 0.3s ease;
   display: inline-block;
 }
