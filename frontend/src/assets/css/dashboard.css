@@ -79,7 +79,7 @@ button:hover {
 ========================== */
 .dashboard-wrapper {
   display: flex;
-  height: 100vh;
+  height: 90%;
   overflow: hidden;
 }
 
